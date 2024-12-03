@@ -1,6 +1,7 @@
 const { Builder, By, Key, until } = require('selenium-webdriver');
 const fs = require('fs');
 const API_KEY = ""; // Your OpenAI API Key
+let researchQuestion = "use of AI in requirements analysis";//broad research objective or research question
 
 const API_URL = "https://api.openai.com/v1/chat/completions";
 
@@ -21,7 +22,7 @@ const fetchAIResponse = async (title, abstract) => {
                 },
                 {
                     role: "user",
-                    content: `Would the following be relevant when researching "use of AI in requirements analysis"?\n\nTitle: ${title}\nAbstract: ${abstract}`,
+                    content: `Would the following be relevant when researching ${researchQuestion}?\n\nTitle: ${title}\nAbstract: ${abstract}`,
                 },
             ],
         }),
@@ -61,7 +62,7 @@ describe('Google Scholar Scraper', function () {
         await driver.manage().window().setRect({ width: 1200, height: 800 });
 
         // Enter search query and click search
-        await driver.findElement(By.id("gs_hdr_tsi")).sendKeys("use of AI in requirements analysis", Key.RETURN);
+        await driver.findElement(By.id("gs_hdr_tsi")).sendKeys(researchQuestion, Key.RETURN);
 
         // Wait for results to load
         await driver.wait(until.elementLocated(By.css(".gs_r.gs_or.gs_scl")), 10000);
@@ -91,7 +92,7 @@ describe('Google Scholar Scraper', function () {
                 try {
                     downloadLink = await paper.findElement(By.css(".gs_or_ggsm a")).getAttribute("href");
                 } catch (e) {
-                    downloadLink = "No download link";
+                    downloadLink = "No file to download";
                 }
 
                 results.push({ title, abstract, downloadLink });
