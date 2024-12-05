@@ -1,0 +1,1 @@
+requires org.apache.pdfbox;
